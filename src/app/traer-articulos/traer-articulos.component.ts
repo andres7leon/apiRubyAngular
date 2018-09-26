@@ -9,13 +9,19 @@ import { ArticuloService } from './../services/articulo.service';
 export class TraerArticulosComponent implements OnInit {
 
 	articulos:any;
-  putArticulo:any;
   idPutArticulo:any;
+  editar:boolean;
+  errores:boolean;
+  articuloPut:any;
+  msjError:string;
 
   constructor(private _articulosServices:ArticuloService) {
     this.articulos = [{titulo:"",contenido:""}]
-  	this.putArticulo = [{titulo:"",contenido:""}]
     this.idPutArticulo=null;
+    this.editar = false;
+    this.errores = false;
+    this.msjError ='';
+    this.articuloPut = {titulo:"",contenido:"",id:""}
   }
 
   ngOnInit() {
@@ -47,17 +53,42 @@ export class TraerArticulosComponent implements OnInit {
     }
   }
 
+  showModificarArticulo(id){
+
+    this.articuloPut.id = JSON.stringify(id);
+    this.editar = !this.editar;
+    this.errores = false;
+
+  }
+
   modificarArticulo(){
 
-    console.log("entraaa enviar por la url y por el cuerpo")
+    console.log("this.articuloPut",this.articuloPut)
+    this.errores = false;
 
-    /*this._articulosServices.modificarArticulo(this.putArticulo).subscribe(
+    if(this.articuloPut.titulo !== '' && this.articuloPut.contenido !== ''){
+      this._articulosServices.modificarArticulo(this.articuloPut).subscribe(
       respuesta=>{
         console.log("respuesta",respuesta)
+        this.articuloPut = {titulo:"",contenido:"",id:""}
+        this.editar = !this.editar;
+        this.traerArticulos()
       },
       error=>{
         console.log("error put")
-      })*/
+        this.errores = true;
+        this.msjError = 'Este usuario no tiene permiso para modificar este articulo';
+      })
+    }else{
+      this.errores = true;
+      this.msjError = 'Por favor valide los campos';
+
+    }
+
+
   }
 
+
+
+    
 }

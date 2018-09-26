@@ -1,33 +1,48 @@
 <div class="container">
-	<div class="row">
-		<table class="table table-bordered table-hover table-striped">
-			<thead>
-				<th>Titulo</th>
-				<th>Ver</th>
-				<th>Editar</th>
-				<th>Eliminar</th>
-			</thead>
-			<tbody>
-				<tr *ngFor="let articulo of articulos">
-					<td><strong>{{articulo.titulo}}</strong></td>
-					<td><a [routerLink]="['/articulo',articulo.id]">Ver</a></td>
-					<td><a [(ngModel)]="idPutArticulo={{articulo.id}}" (click)="modificarArticulo()" class="btn btn-warning">Editar</a></td>
-					<td><a (click)="eliminarArticulo(articulo.id)" class="btn btn-danger">Eliminar</a></td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="row" style="height: 80vh;overflow: auto;margin-top: 10px;">
+		
+		<div col-12>
+			<table class="table table-bordered table-hover table-striped" [hidden]="editar">
+				<thead>
+					<th>Titulo</th>
+					<th>Ver</th>
+					<th>Editar</th>
+					<th>Eliminar</th>
+				</thead>
+				<tbody>
+					<tr *ngFor="let articulo of articulos">
+						<td><strong>{{articulo.titulo}}</strong></td>
+						<td><a [routerLink]="['/articulo',articulo.id]">Ver</a></td>
+						<td><a  (click)="showModificarArticulo(articulo.id)" class="btn btn-warning">Editar</a></td>
+						<td><a (click)="eliminarArticulo(articulo.id)" class="btn btn-danger">Eliminar</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-		<form>
-	        <div class="form-group">
-	          <label for="tituloArticulo">Titulo Articulo</label>
-	          <input type="email" class="form-control" id="tituloArticulo" placeholder="Titulo" [(ngModel)]="articulo.titulo" name="tituloArticulo" required="true">
-	        </div>
-	        <div class="form-group">
-	          <label for="descripcionArticulo">Descripcion Articulo</label>
-	          <input type="email" class="form-control" id="descripcionArticulo" placeholder="Descripcion Articulo" name="descripcionArticulo" [(ngModel)]="articulo.contenido" required="true">
-	        </div>
-	        <button type="submit" class="btn btn-primary" (click)="modificarArticulo()">Actualizar</button>
-	    </form>
+
+		<div class="col-12">
+			<h1 class="text-center">Editar Articulo</h1>
+				
+			<form [hidden]="!editar">
+		        <div class="form-group">
+		          <label for="tituloArticuloPut">Titulo Articulo</label>
+		          <input type="text" class="form-control" id="tituloArticuloPut" placeholder="Titulo" [(ngModel)]="articuloPut.titulo" name="tituloArticuloPut" required="true">
+		        </div>
+		        <div class="form-group">
+		          <label for="descripcionArticuloPut">Descripcion Articulo</label>
+		          <input type="email" class="form-control" id="descripcionArticuloPut" placeholder="Descripcion Articulo" name="descripcionArticuloPut" [(ngModel)]="articuloPut.contenido" required="true">
+		        </div>
+		        <button type="submit" class="btn btn-primary" (click)="modificarArticulo()">Actualizar</button> 
+		        <button class="btn btn-info ml-1" (click)="editar=!editar">Volver</button>
+		    </form>
+
+			<br>
+			<div class="alert alert-danger" role="alert" *ngIf="errores">
+			  {{msjError}}
+			</div>		
+		</div>
 
 	</div>
+
 </div>
